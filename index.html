@@ -1,0 +1,45 @@
+<html>
+	<head>
+		<title>Tavern Wenches: The Quest To Be Alone</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+		
+		<script src="src/game.js" type="text/javascript"></script>
+		<script src="src/board.js" type="text/javascript"></script>	
+		<script src="src/character.js" type="text/javascript"></script>
+		<script src="src/controls.js" type="text/javascript"></script>
+		<style>
+			canvas{border: 1px solid pink; margin: 0 auto;}
+		</style>
+		<script type="text/javascript">
+			var PC = new Player("PC", 20, 10, 10);
+			var NPC = new Player("NPC", 20, 10, 10);
+			
+			$(document).ready(function(){
+				$(".PC").click(function(){
+					if(PC.rollAttack(NPC.getDefense()))
+					{
+						NPC.takeDamage(6); //roll six sided dice
+					}
+				});
+				$(".NPC").click(function(){
+					if(NPC.rollAttack(PC.getDefense()))
+					{
+						PC.takeDamage(6); //roll six sided dice
+					}
+				})
+			
+				
+			});
+
+		</script>
+	</head>
+	<body>
+		<canvas id="canvas" height="320" width="800">Your browser is lame and doesn't support canvas</canvas>
+		<p><button type="button" class="PC">PC ATTACKS!</button></p>
+		<p><button type="button" class="NPC">NPC ATTACKS</button></p>
+		<script type="text/javascript">
+			var game = new Game();
+			game.init();
+		</script>
+	</body>
+</html>
