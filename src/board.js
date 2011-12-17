@@ -26,6 +26,8 @@ function Board(){
 	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 	];
+	this.mapTiles = new Image();
+	this.mapTiles.src = "lib/images/tile-map.png";
 }
 
 Board.prototype.clear = function(){
@@ -86,17 +88,23 @@ Board.prototype.drawPlayer = function(){
 	this.drawRects(this.player[1] * 16, this.player[0] * 16, 16, 15, [200, 0, 60]);
 }
 
+
 Board.prototype.drawTile = function(x,y)
 {
 	//console.log("["+x+", "+y+"] = " + this.map[x][y]);
 	if(this.map[x][y] == 0)
 	{
-		this.drawRects(x*16,y*16,16,16,[0,0,0]);
+		this.drawTileImage(x*16,y*16);
 	}
 	
 	else if (this.map[x][y] == 1){
 		this.drawRects(x*16,y*16,16,16,[100,0,100]);	
 	}
+}
+
+Board.prototype.drawTileImage = function(x,y)
+{
+	this.ctx.drawImage(this.mapTiles,0,0,16,16,y,x,16,16);
 }
 
 Board.prototype.drawRects = function(x,y,w,h,color){
