@@ -78,7 +78,8 @@ Player.prototype.takeDamage = function(min, max){
 	this.health -= damage;
 	
 	console.log(this.nickname + " takes " + damage + " damage. " + this.health + " hitpoints left." )
-	if(this.health < 0){
+	if(this.health <= 0){
 		console.log(this.nickname + " Passed Out!");
+		this.setLocation(-10,-10);
 	}
 }

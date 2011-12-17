@@ -4,7 +4,7 @@ function Board(){
 	
 	this.customer = [5,5];
 	
-	this.PC = new Player("Tavern Wench", 20, 10, 10, [10,10]);
+	this.PC = new Player("Tavern Wench", 5, 10, 10, [10,10]);
 	this.NPC = new Player("NPC", 10, 10, 10, [5,5]);
 
 	
@@ -112,10 +112,13 @@ Board.prototype.moveRight = function(){
 
 Board.prototype.checkCollision = function(x,y){
 	
-	if(this.map[x][y] == 0)
+	if(x < 0 || y < 0){
+		return false;
+	}
+	else if(this.map[x][y] == 0)
 	{
 		var local=[y,x]
-		if(this.customer[0] == y && this.customer[1] == x){
+		if(this.NPC.y() == y && this.NPC.x() == x){
 			
 			return false;
 		}
@@ -153,7 +156,7 @@ Board.prototype.drawStatus = function(health){
 }
 
 Board.prototype.drawCustomer = function(){
-	this.drawRects(this.customer[1] * 16, this.customer[0] * 16, 16, 15, [200, 0, 60]);	
+	this.drawRects(this.NPC.x() * 16, this.NPC.y() * 16, 16, 15, [200, 0, 60]);	
 }	
 
 Board.prototype.drawTile = function(x,y)
