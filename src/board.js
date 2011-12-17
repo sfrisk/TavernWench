@@ -4,8 +4,10 @@ function Board(){
 	
 	this.customer = [5,5];
 	
-	this.PC = new Player("PC", 20, 10, 10, [10,10]);
-	this.NPC = new Player("NPC", 20, 10, 10, [5,5]);
+	this.PC = new Player("Tavern Wench", 20, 10, 10, [10,10]);
+	this.NPC = new Player("NPC", 10, 10, 10, [5,5]);
+
+	
 	//find better way to do this
 	this.map = 
 	[
@@ -57,6 +59,8 @@ function Board(){
 	this.mapTiles.src = "lib/images/tile-map.png";
 	this.playerTile = new Image();
 	this.playerTile.src = "lib/images/people-map.png";
+	this.statusPlayer = new Image();
+	this.statusPlayer.src = "lib/images/status.png";
 }
 
 Board.prototype.clear = function(){
@@ -129,7 +133,6 @@ Board.prototype.checkCollision = function(x,y){
 Board.prototype.draw = function(){
 	this.clear();
 	this.generateGrid();
-
 	this.drawCustomer();
 	this.drawPlayer();
 }
@@ -138,7 +141,17 @@ Board.prototype.drawPlayer = function(){
 	//this.drawRects(this.PC.y() * 16, this.PC.x() * 16, 16, 15, [200, 0, 60]);
 	this.ctx.drawImage(this.playerTile,0,16,16,16,this.PC.x() * 16,this.PC.y()*16,16,16); //feet
 	this.ctx.drawImage(this.playerTile,0,0,16,16,this.PC.x() * 16,(this.PC.y()-1)*16,16,16); //head
+	
+	this.drawStatus(this.PC.getHealth());
 }
+
+Board.prototype.drawStatus = function(health){
+	for (var i = 0; i < health; i++)
+	{
+		this.ctx.drawImage(this.statusPlayer,0,0,16,16,(i * 20) + 20,10,16,16);
+	}
+}
+
 Board.prototype.drawCustomer = function(){
 	this.drawRects(this.customer[1] * 16, this.customer[0] * 16, 16, 15, [200, 0, 60]);	
 }	
@@ -154,6 +167,17 @@ Board.prototype.drawTileImage = function(x,y,pos)
 {
 	
 	this.ctx.drawImage(this.mapTiles,pos*16,0,16,16,y,x,16,16);
+}
+
+Board.prototype.attack = function(){
+	if(this.PC.rollAttack(this.NPC.getDefense()))
+	{
+		this.NPC.takeDamage(6); //roll six sided dice
+	}
+	if(this.NPC.rollAttack(this.PC.getDefense()))
+	{
+		this.PC.takeDamage(6); //roll six sided dice
+	}
 }
 
 Board.prototype.drawRects = function(x,y,w,h,color){

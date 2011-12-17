@@ -9,7 +9,7 @@ $(window).keypress(function(e){
 
 	if(charcode == attack){
 		e.preventDefault();
-		console.log("ATTACKING THE DARKNESS")	
+		game.board.attack();
 	}
 	
 	if(keyCode == down){
