@@ -2,6 +2,8 @@ function Board(){
 	this.canvas = document.getElementById("canvas");
 	this.ctx = this.canvas.getContext("2d");
 	this.player = [10,10];
+	this.customer = [5,5];
+	
 	//find better way to do this
 	this.map = 
 	[
@@ -72,8 +74,7 @@ Board.prototype.setPlayer = function(x,y){
 }
 
  Board.prototype.moveUp = function(){
-	
- 	if(this.map[this.player[1] - 1][this.player[0]] == 0)
+	if(this.checkCollision(this.player[1] - 1, this.player[0] ))
  	{
  		this.setPlayer(this.player[0], this.player[1] - 1);
 	
@@ -82,31 +83,53 @@ Board.prototype.setPlayer = function(x,y){
  
  
 Board.prototype.moveDown = function(){
- if(this.map[this.player[1] + 1][this.player[0]] == 0)
+	if(this.checkCollision(this.player[1] + 1, this.player[0] ))
  	{
 		this.setPlayer(this.player[0], this.player[1] + 1);
  	}
 }
 
 Board.prototype.moveLeft = function(){
-if(this.map[this.player[1]][this.player[0] - 1] == 0)
+	if(this.checkCollision(this.player[1], this.player[0] - 1))
 	{
 		this.setPlayer(this.player[0] - 1, this.player[1]);
  	}
 }
 
 Board.prototype.moveRight = function(){
-if(this.map[this.player[1]][this.player[0] + 1] == 0)
+	if(this.checkCollision(this.player[1], this.player[0] + 1))
 	{
 	
 		this.setPlayer(this.player[0] + 1, this.player[1]);
  	}
  }
 
+Board.prototype.checkCollision = function(x,y){
+	
+	if(this.map[x][y] == 0)
+	{
+		var local=[y,x]
+		if(this.customer[0] == y && this.customer[1] == x)
+		{
+			console.log(this.customer + " vs " + [y,x]);
+			return false;
+		}
+		else{
+			console.log(this.customer + " vs " + [y,x]);
+			return true;
+		}
+	}
+	else
+	{
+		return false
+	}	
+}
+
 Board.prototype.draw = function(){
 	this.clear();
 	this.generateGrid();
 	this.drawPlayer();
+	this.drawCustomer();
 }
 
 Board.prototype.drawPlayer = function(){
@@ -114,7 +137,9 @@ Board.prototype.drawPlayer = function(){
 	this.ctx.drawImage(this.playerTile,0,16,16,16,this.player[0] * 16,this.player[1]*16,16,16); //feet
 	this.ctx.drawImage(this.playerTile,0,0,16,16,this.player[0] * 16,(this.player[1]-1)*16,16,16); //head
 }
-
+Board.prototype.drawCustomer = function(){
+	this.drawRects(this.customer[1] * 16, this.customer[0] * 16, 16, 15, [200, 0, 60]);	
+}	
 
 Board.prototype.drawTile = function(x,y)
 {
