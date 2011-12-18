@@ -5,6 +5,7 @@ function rollDice(min, max){
 function Player (name, health, defense, attack, location)
 {
 	this.nickname = name;
+	
 	this.health = health; //current health
 	this.fullHealth = health; //full health
 	this.defense = defense; //defense
