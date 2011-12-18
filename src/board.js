@@ -5,37 +5,8 @@ function Board(){
 	
 	this.PC = new Player("Tavern Wench", 5, 5, 10, [4,4]);
 	this.NPC = new Player("NPC", 5, 3, 10, [5,5]);
-
+	this.map = new Map("lib/map.json");
 	
-	//find better way to do this
-	this.map = 
-	[
-	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-	[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-	];
-	this.TileMap = 
-	[
-	[4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3],
-	[4,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3],
-	[4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-	[4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-	[4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-	[4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-	[4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-	[4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-	[4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3],
-	[4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3]
-	];
-	this.mapTiles = new Image();
-	this.mapTiles.src = "lib/images/tile-map-large.png";
 	this.playerTile = new Image();
 	this.playerTile.src = "lib/images/people-map.png";
 	this.statusPlayer = new Image();
@@ -49,13 +20,12 @@ Board.prototype.clear = function(){
 }
 
 Board.prototype.generateGrid = function(){
-	for (var y = 0; y < this.map[0].length; y++){
-		for (var x = 0; x < this.map.length; x++){
+	for (var y = 0; y < this.map.getWidth(); y++){
+		for (var x = 0; x < this.map.getHeight(); x++){
 			this.drawTile(x,y);
 		}
 	}
 }
-//temporary
 Board.prototype.setPlayer = function(x,y){
 	this.PC.setLocation(x,y);
 }
@@ -96,17 +66,12 @@ Board.prototype.checkCollision = function(x,y){
 	if(x < 0 || y < 0){
 		return false;
 	}
-	else if(this.map[x][y] == 0)
+	else if(this.map.isEmpty(x,y))
 	{
-		var local=[y,x]
-		if(this.NPC.y() == y && this.NPC.x() == x){
-			
+		if(this.NPC.y() == y && this.NPC.x() == x)
 			return false;
-		}
-		else{
-		
+		else
 			return true;
-		}
 	}
 	else
 	{
@@ -122,9 +87,9 @@ Board.prototype.draw = function(){
 }
 
 Board.prototype.drawPlayer = function(){
-	this.drawRects(this.PC.y() * 32, this.PC.x() * 32, 32, 32, [100, 0, 100]);
-	//this.ctx.drawImage(this.playerTile,0,16,16,16,this.PC.x() * 32,this.PC.y()*32,16,16); //feet
-	//this.ctx.drawImage(this.playerTile,0,0,16,16,this.PC.x() * 32,(this.PC.y()-1)*32,16,16); //head
+	this.drawRects(this.PC.y() * this.map.cellWidth, this.PC.x() * this.map.cellWidth, this.map.cellWidth, this.map.cellWidth, [100, 0, 100]);
+	//this.ctx.drawImage(this.playerTile,0,16,16,16,this.PC.x() * this.map.cellWidth,this.PC.y()*this.map.cellWidth,16,16); //feet
+	//this.ctx.drawImage(this.playerTile,0,0,16,16,this.PC.x() * this.map.cellWidth,(this.PC.y()-1)*this.map.cellWidth,16,16); //head
 	
 	this.drawStatus(this.PC.getHealth());
 }
@@ -137,20 +102,18 @@ Board.prototype.drawStatus = function(health){
 }
 
 Board.prototype.drawCustomer = function(){
-	this.drawRects(this.NPC.x() * 32, this.NPC.y() * 32, 32, 32, [200, 0, 60]);	
+	this.drawRects(this.NPC.x() * this.map.cellWidth, this.NPC.y() * this.map.cellWidth, this.map.cellWidth, this.map.cellWidth, [200, 0, 60]);	
 }	
 
 Board.prototype.drawTile = function(x,y)
 {
-	//console.log("["+x+", "+y+"] = " + this.map[x][y]);
-		this.drawTileImage(x*32,y*32, this.TileMap[x][y]);	
-	
+	this.drawTileImage(x*this.map.cellWidth,y*this.map.cellWidth, this.map.backgroundLayer[x][y]);	
 }
 
 Board.prototype.drawTileImage = function(x,y,pos)
 {
 	
-	this.ctx.drawImage(this.mapTiles,pos*32,0,32,32,y,x,32,32);
+	this.ctx.drawImage(this.map.backgroundSource,pos*this.map.cellWidth,0,this.map.cellWidth,this.map.cellWidth,y,x,this.map.cellWidth,this.map.cellWidth);
 }
 
 Board.prototype.attack = function(){
