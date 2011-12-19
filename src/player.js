@@ -38,29 +38,41 @@ Player.prototype.setLocation = function(x,y){
 	this.loc = [x,y];
 }
 
+Player.prototype.near = function(loc){
+	
+	var x = Math.abs(this.loc[1] - loc[1]);
+	var y = Math.abs(this.loc[0] - loc[0]);
+	if(x == 0 && y == 1)
+		return true;
+	else if( x == 1 && y == 0)
+		return true;
+	else
+		return false;
+}
+
 //Attack
 Player.prototype.rollAttack= function(defense){
 	var attackRoll = Math.floor(Math.random()*20) + 1;
 	defense += 10;
 	if(attackRoll == 1){
 		//Misses
-		textReadout.append("<p>"+this.nickname + " misses horribly. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+		textReadout.after("<p>"+this.nickname + " misses horribly. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 		return false;
 	}
 	else if (attackRoll == 20){
 		//Critical Hit
-		textReadout.append("<p>"+ this.nickname + " hits.  Critical Hit! (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+		textReadout.after("<p>"+ this.nickname + " hits.  Critical Hit! (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 		return true;
 	}
 	else{
 		//Check For Hit
 		attackRoll += this.getAttack();
 		if(attackRoll > defense){
-			textReadout.append("<p>"+this.nickname + " hits. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+			textReadout.after("<p>"+this.nickname + " hits. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 			return true;
 		}
 		else{
-			textReadout.append("<p>"+this.nickname + " misses. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+			textReadout.after("<p>"+this.nickname + " misses. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 			return false;
 		}
 	}
@@ -74,9 +86,9 @@ Player.prototype.takeDamage = function(min, max){
 	damage = Math.floor(Math.random()*6) + 1;
 	this.health -= damage;
 	
-	console.log(this.nickname + " takes " + damage + " damage. " + this.health + " hitpoints left." )
+	textReadout.after("<p>"+this.nickname + " takes " + damage + " damage. " + this.health + " hitpoints left.</p>" )
 	if(this.health <= 0){
-		console.log(this.nickname + " Passed Out!");
+		textReadout.after("<p>"+this.nickname + " Passed Out!</p>");
 		this.setLocation(-10,-10);
 	}
 }

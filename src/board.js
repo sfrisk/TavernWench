@@ -6,7 +6,7 @@ function Board(){
 	
 	
 	
-	this.PC = new Player("Tavern Wench", 5, 5, 10, [4,4]);
+	this.PC = new Player("Tavern Wench", 15, 5, 10, [4,4]);
 	this.NPC = new Player("NPC", 5, 3, 10, [5,5]);
 	this.map = new Map("lib/map.json");
 	this.playerTile = new Image;
@@ -110,7 +110,7 @@ Board.prototype.drawCustomer = function(){
 Board.prototype.drawStatus = function(health){
 	for (var i = 0; i < health; i++)
 	{
-		this.ctx.drawImage(this.statusPlayer,0,0,16,16,(i * 20) + 20,10,16,16);
+		this.ctx.drawImage(this.statusPlayer,0,0,16,16,(i * 20) + 20,280,16,16);
 	}
 }
 
@@ -123,14 +123,21 @@ Board.prototype.drawTile = function(x,y)
 }
 
 Board.prototype.attack = function(){
-	if(this.PC.rollAttack(this.NPC.getDefense()))
-	{
-		this.NPC.takeDamage(6); //roll six sided dice
+	//check for PC near NPC
+	if (this.PC.near(this.NPC.loc)){
+		//attack
+		if(this.PC.rollAttack(this.NPC.getDefense()))
+		{
+			this.NPC.takeDamage(6); //roll six sided dice
+		}
+		if(this.NPC.rollAttack(this.PC.getDefense()))
+		{
+			this.PC.takeDamage(6); //roll six sided dice
+		}
 	}
-	if(this.NPC.rollAttack(this.PC.getDefense()))
-	{
-		this.PC.takeDamage(6); //roll six sided dice
-	}
+	textReadout.after("<p>No customer next to you.<p>");
+	
+	
 }
 
 Board.prototype.drawRects = function(x,y,w,h,color){
