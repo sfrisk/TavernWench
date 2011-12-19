@@ -1,19 +1,31 @@
 function Board(){
 	this.canvas = document.getElementById("canvas");
 	this.ctx = this.canvas.getContext("2d");
+	this.width = 800;
+	this.height= 320;
+	
 	
 	
 	this.PC = new Player("Tavern Wench", 5, 5, 10, [4,4]);
 	this.NPC = new Player("NPC", 5, 3, 10, [5,5]);
 	this.map = new Map("lib/map.json");
+	this.playerTile = new Image;
+	this.playerTile.src = "lib/images/dummy-art.png";
 	
-	this.playerTile = new Image();
-	this.playerTile.src = "lib/images/people-map.png";
-	this.statusPlayer = new Image();
+	this.badTile = new Image;
+	this.badTile.src = "lib/images/kefka.png";
+	
+	this.statusPlayer = new Image;
 	this.statusPlayer.src = "lib/images/status.png";
 	
-	
 }
+Board.prototype.draw = function(){
+	this.clear();
+	this.generateGrid();
+	this.drawCustomer();
+	this.drawPlayer();
+}
+
 
 Board.prototype.clear = function(){
 	this.ctx.clearRect(0,0, this.width, this.height);
@@ -30,7 +42,9 @@ Board.prototype.setPlayer = function(x,y){
 	this.PC.setLocation(x,y);
 }
 
- Board.prototype.moveUp = function(){
+
+
+Board.prototype.moveUp = function(){
 	if(this.checkCollision(this.PC.y() - 1, this.PC.x() ))
  	{
  		this.setPlayer(this.PC.x(), this.PC.y() - 1);
@@ -61,6 +75,8 @@ Board.prototype.moveRight = function(){
  	}
  }
 
+
+
 Board.prototype.checkCollision = function(x,y){
 	
 	if(x < 0 || y < 0){
@@ -79,19 +95,16 @@ Board.prototype.checkCollision = function(x,y){
 	}	
 }
 
-Board.prototype.draw = function(){
-	this.clear();
-	this.generateGrid();
-	this.drawCustomer();
-	this.drawPlayer();
-}
+
 
 Board.prototype.drawPlayer = function(){
-	this.drawRects(this.PC.y() * this.map.cellWidth, this.PC.x() * this.map.cellWidth, this.map.cellWidth, this.map.cellWidth, [100, 0, 100]);
-	//this.ctx.drawImage(this.playerTile,0,16,16,16,this.PC.x() * this.map.cellWidth,this.PC.y()*this.map.cellWidth,16,16); //feet
-	//this.ctx.drawImage(this.playerTile,0,0,16,16,this.PC.x() * this.map.cellWidth,(this.PC.y()-1)*this.map.cellWidth,16,16); //head
-	
+
+	this.ctx.drawImage(this.playerTile,0,0,64,64,this.PC.x() * this.map.cellWidth  - (this.map.cellWidth/2),(this.PC.y()-1)*this.map.cellWidth,64,64); 
 	this.drawStatus(this.PC.getHealth());
+}
+
+Board.prototype.drawCustomer = function(){
+	this.ctx.drawImage(this.badTile,0,0,64,64,this.NPC.x() * this.map.cellWidth,(this.NPC.y()-1)*this.map.cellWidth,64,64);
 }
 
 Board.prototype.drawStatus = function(health){
@@ -101,19 +114,12 @@ Board.prototype.drawStatus = function(health){
 	}
 }
 
-Board.prototype.drawCustomer = function(){
-	this.drawRects(this.NPC.x() * this.map.cellWidth, this.NPC.y() * this.map.cellWidth, this.map.cellWidth, this.map.cellWidth, [200, 0, 60]);	
-}	
-
+//will work on this later, need to be able to draw multiple times on a layer (background + props?)
 Board.prototype.drawTile = function(x,y)
 {
-	this.drawTileImage(x*this.map.cellWidth,y*this.map.cellWidth, this.map.backgroundLayer[x][y]);	
-}
-
-Board.prototype.drawTileImage = function(x,y,pos)
-{
+	var pos = this.map.backgroundLayer[x][y];
+	this.ctx.drawImage(this.map.backgroundSource,this.map.getSpriteX(pos),this.map.getSpriteY(pos),this.map.cellWidth,this.map.cellWidth,this.map.getPixelY(y),this.map.getPixelX(x),this.map.cellWidth,this.map.cellWidth);
 	
-	this.ctx.drawImage(this.map.backgroundSource,pos*this.map.cellWidth,0,this.map.cellWidth,this.map.cellWidth,y,x,this.map.cellWidth,this.map.cellWidth);
 }
 
 Board.prototype.attack = function(){

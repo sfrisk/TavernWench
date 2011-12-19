@@ -31,3 +31,19 @@ Map.prototype.getWidth = function(){
 Map.prototype.getHeight = function(){
 	return this.backgroundLayer.length;
 }
+
+Map.prototype.getPixelX = function(x){
+	return x * this.cellWidth;
+}
+
+Map.prototype.getPixelY = function(y){
+	return y * this.cellWidth;
+}
+
+Map.prototype.getSpriteX = function(pos){
+	return (pos - (Math.floor(pos/this.dimensions[0]) * pos)) * this.cellWidth;
+}
+
+Map.prototype.getSpriteY = function(pos){
+	return Math.floor(pos/this.dimensions[0]) * this.cellWidth;
+}

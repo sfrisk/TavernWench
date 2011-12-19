@@ -1,7 +1,3 @@
-function rollDice(min, max){
-	Math.floor(Math.random() * (min - max + 1) + max);
-}
-
 function Player (name, health, defense, attack, location)
 {
 	this.nickname = name;
@@ -48,23 +44,23 @@ Player.prototype.rollAttack= function(defense){
 	defense += 10;
 	if(attackRoll == 1){
 		//Misses
-		console.log(this.nickname + " misses horribly. (" + attackRoll + ") vs (" + defense + ")");
+		textReadout.append("<p>"+this.nickname + " misses horribly. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 		return false;
 	}
 	else if (attackRoll == 20){
 		//Critical Hit
-		console.log(this.nickname + " hits.  Critical Hit! (" + attackRoll + ") vs (" + defense + ")");
+		textReadout.append("<p>"+ this.nickname + " hits.  Critical Hit! (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 		return true;
 	}
 	else{
 		//Check For Hit
 		attackRoll += this.getAttack();
 		if(attackRoll > defense){
-			console.log(this.nickname + " hits. (" + attackRoll + ") vs (" + defense + ")");
+			textReadout.append("<p>"+this.nickname + " hits. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 			return true;
 		}
 		else{
-			console.log(this.nickname + " misses. (" + attackRoll + ") vs (" + defense + ")");
+			textReadout.append("<p>"+this.nickname + " misses. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
 			return false;
 		}
 	}

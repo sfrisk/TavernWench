@@ -5,7 +5,7 @@ function Game()
 
 Game.prototype.init = function(){
 	setInterval("game.board.draw()", 75);
-
+//	game.board.draw();
 }
 
 
