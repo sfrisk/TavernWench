@@ -10,10 +10,8 @@ function Board(){
 	this.NPC = new Player("NPC", 5, 3, 10, [5,5]);
 	this.map = new Map("lib/map.json");
 	this.playerTile = new Image;
-	this.playerTile.src = "lib/images/dummy-art.png";
-	
-	this.badTile = new Image;
-	this.badTile.src = "lib/images/kefka.png";
+	this.playerTile.src = "lib/images/people-map.png";
+
 	
 	this.statusPlayer = new Image;
 	this.statusPlayer.src = "lib/images/status.png";
@@ -99,12 +97,12 @@ Board.prototype.checkCollision = function(x,y){
 
 Board.prototype.drawPlayer = function(){
 
-	this.ctx.drawImage(this.playerTile,0,0,64,64,this.PC.x() * this.map.cellWidth  - (this.map.cellWidth/2),(this.PC.y()-1)*this.map.cellWidth,64,64); 
+	this.ctx.drawImage(this.playerTile,0,0,32,64,this.PC.x() * this.map.cellWidth,(this.PC.y()-1)*this.map.cellWidth,32,64); 
 	this.drawStatus(this.PC.getHealth());
 }
 
 Board.prototype.drawCustomer = function(){
-	this.ctx.drawImage(this.badTile,0,0,64,64,this.NPC.x() * this.map.cellWidth,(this.NPC.y()-1)*this.map.cellWidth,64,64);
+	this.ctx.drawImage(this.playerTile,32,0,32,64,this.NPC.x() * this.map.cellWidth,(this.NPC.y()-1)*this.map.cellWidth,32,64);
 }
 
 Board.prototype.drawStatus = function(health){

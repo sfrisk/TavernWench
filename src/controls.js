@@ -3,11 +3,12 @@ var up = 38;
 var right = 39;
 var down = 40;
 var attack = 32;
-$(window).keypress(function(e){
+function checkKey(e){
+
 	var keyCode = e.keyCode;
 	var charcode = e.charCode;
 
-	if(charcode == attack){
+	if(charcode == attack || keyCode == attack){
 		e.preventDefault();
 		game.board.attack();
 	}
@@ -29,4 +30,11 @@ $(window).keypress(function(e){
 		game.board.moveLeft();
 	}
 
-})
+}
+
+
+if ($.browser.mozilla) {
+    $(window).keypress (checkKey);
+} else {
+    $(document).keydown (checkKey);
+}
