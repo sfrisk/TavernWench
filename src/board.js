@@ -20,7 +20,7 @@ function Board(){
 Board.prototype.draw = function(){
 	this.clear();
 	this.generateGrid();
-	this.drawCustomer();
+	//this.drawCustomer();
 	this.drawPlayer();
 }
 
@@ -97,7 +97,14 @@ Board.prototype.checkCollision = function(x,y){
 
 Board.prototype.drawPlayer = function(){
 
-	this.ctx.drawImage(this.playerTile,0,0,32,64,this.PC.x() * this.map.cellWidth,(this.PC.y()-1)*this.map.cellWidth,32,64); 
+	this.ctx.drawImage(this.playerTile,0,32,32,32,this.PC.x() * this.map.cellWidth,(this.PC.y())*this.map.cellWidth,32,32); 
+	
+	this.ctx.drawImage(this.playerTile,32,32,32,32,this.NPC.x() * this.map.cellWidth,(this.NPC.y())*this.map.cellWidth,32,32); 
+		
+	
+	this.ctx.drawImage(this.playerTile,0,0,32,32,this.PC.x() * this.map.cellWidth,(this.PC.y()-1)*this.map.cellWidth,32,32); 
+	this.ctx.drawImage(this.playerTile,32,0,32,32,this.NPC.x() * this.map.cellWidth,(this.NPC.y()-1)*this.map.cellWidth,32,32);
+	
 	this.drawStatus(this.PC.getHealth());
 }
 
@@ -128,7 +135,8 @@ Board.prototype.attack = function(){
 		{
 			this.NPC.takeDamage(6); //roll six sided dice
 		}
-		if(this.NPC.rollAttack(this.PC.getDefense()))
+		
+		if(this.NPC.rollAttack(this.PC.getDefense()) && this.NPC.health > 0)
 		{
 			this.PC.takeDamage(6); //roll six sided dice
 		}
