@@ -7,7 +7,7 @@ function Board(){
 	
 	
 	this.PC = new Player("Tavern Wench", 15, 5, 10, [4,4]);
-	this.NPC = new Player("NPC", 5, 3, 10, [5,5]);
+	this.NPC = new Player("NPC", 10, 5, 10, [5,5]);
 	this.map = new Map("lib/map.json");
 	this.playerTile = new Image;
 	this.playerTile.src = "lib/images/people-map.png";
@@ -136,12 +136,18 @@ Board.prototype.attack = function(){
 			this.NPC.takeDamage(6); //roll six sided dice
 		}
 		
-		if(this.NPC.rollAttack(this.PC.getDefense()) && this.NPC.health > 0)
-		{
-			this.PC.takeDamage(6); //roll six sided dice
+		if(this.NPC.health > 0){
+			if(this.NPC.rollAttack(this.PC.getDefense()))
+			{
+				this.PC.takeDamage(6); //roll six sided dice
+			}
 		}
 	}
-	textReadout.after("<p>No customer next to you.<p>");
+	else{
+		textReadout.after("<p>No customer next to you.<p>");
+	}
+	
+	textReadout.after("<hr />");
 	
 	
 }

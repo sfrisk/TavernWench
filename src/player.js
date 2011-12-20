@@ -56,23 +56,23 @@ Player.prototype.rollAttack= function(defense){
 	defense += 10;
 	if(attackRoll == 1){
 		//Misses
-		textReadout.after("<p>"+this.nickname + " misses horribly. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+		textReadout.after("<p>"+this.nickname + " misses horribly.<p>");
 		return false;
 	}
 	else if (attackRoll == 20){
 		//Critical Hit
-		textReadout.after("<p>"+ this.nickname + " hits.  Critical Hit! (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+		textReadout.after("<p>"+this.nickname + " hits in an epic fashion!<p>");
 		return true;
 	}
 	else{
 		//Check For Hit
 		attackRoll += this.getAttack();
 		if(attackRoll > defense){
-			textReadout.after("<p>"+this.nickname + " hits. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+			textReadout.after("<p>"+this.nickname + " hits!.<p>");
 			return true;
 		}
 		else{
-			textReadout.after("<p>"+this.nickname + " misses. (" + attackRoll + ") vs (" + defense + ")"+"<p>");
+			textReadout.after("<p>"+this.nickname + " misses.<p>");
 			return false;
 		}
 	}
@@ -86,7 +86,7 @@ Player.prototype.takeDamage = function(min, max){
 	damage = Math.floor(Math.random()*6) + 1;
 	this.health -= damage;
 	
-	textReadout.after("<p>"+this.nickname + " takes " + damage + " damage. " + this.health + " hitpoints left.</p>" )
+	textReadout.after("<p><em>"+this.nickname + "</em> takes " + damage + " damage. " + this.health + " hitpoints left.</p>" )
 	if(this.health <= 0){
 		textReadout.after("<p>"+this.nickname + " Passed Out!</p>");
 		this.setLocation(-10,-10);
